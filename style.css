@@ -1,0 +1,139 @@
+
+:root {
+    --bg: #f0f0f5;
+    --card: #ffffff;
+    --text: #222;
+    --border: #ccc;
+}
+
+
+.dark {
+    --bg: #111;
+    --card: #1c1c1c;
+    --text: #f0f0f0;
+    --border: #444;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: Arial, sans-serif;
+
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+
+    padding-top: 40px;
+    min-height: 100vh;
+}
+
+
+.container {
+    width: 100%;
+    max-width: 420px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+
+    text-align: center;
+}
+
+.theme-btn {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+
+    padding: 6px 8px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    border-radius: 8px;
+
+    cursor: pointer;
+    font-size: 18px;
+}
+
+
+.card {
+    width: 100%;
+    background: var(--card);
+    padding: 20px;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+
+    align-items: stretch; 
+}
+
+
+.card label {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    font-size: 15px;
+    text-align: left;
+    width: 100%;
+}
+
+
+input,
+textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
+    font-size: 15px;
+}
+
+.time-group {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+}
+
+.time-group label {
+    flex: 1;
+}
+
+.add-btn {
+    width: 100%;
+    background: #007bff;
+    border: none;
+    padding: 12px;
+    color: white;
+    font-size: 16px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.add-btn:hover {
+    opacity: 0.9;
+}
+
+#listaAtividades {
+    width: 100%;
+}
+
+#listaAtividades .atividade {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 15px;
+    border-radius: 12px;
+
+    width: 100%;
+    text-align: left;
+}
