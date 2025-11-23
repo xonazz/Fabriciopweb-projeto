@@ -21,13 +21,34 @@ form.addEventListener("submit", (event) => {
     atividade.classList.add("atividade");
 
     atividade.innerHTML = `
-        <p><strong>Data:</strong> ${data}</p>
-        <p><strong>Nome:</strong> ${nome}</p>
-        <p><strong>Horário:</strong> ${inicio} às ${fim}</p>
-        <p><strong>Descrição:</strong> ${descricao}</p>
+        <p><strong>${nome}</strong></p>
+        <p>${data}</p>
+        <p>${inicio} — ${fim}</p>
+        <p>${descricao}</p>
+
+        <div class="btn-group">
+            <button class="btn-edit">Editar</button>
+            <button class="btn-delete">Excluir</button>
+        </div>
     `;
 
     lista.appendChild(atividade);
+
+    // BOTÃO EXCLUIR
+    atividade.querySelector(".btn-delete").addEventListener("click", () => {
+        atividade.remove();
+    });
+
+    // BOTÃO EDITAR
+    atividade.querySelector(".btn-edit").addEventListener("click", () => {
+        document.getElementById("data").value = data;
+        document.getElementById("nome").value = nome;
+        document.getElementById("inicio").value = inicio;
+        document.getElementById("fim").value = fim;
+        document.getElementById("descricao").value = descricao;
+
+        atividade.remove();
+    });
 
     form.reset();
 });
