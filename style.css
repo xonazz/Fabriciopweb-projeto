@@ -1,11 +1,9 @@
-
 :root {
-    --bg: #f0f0f5;
+    --bg: #f1f1f4;
     --card: #ffffff;
     --text: #222;
-    --border: #ccc;
+    --border: #d2d2d2;
 }
-
 
 .dark {
     --bg: #111;
@@ -14,13 +12,14 @@
     --border: #444;
 }
 
+/* RESET */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-
+/* BODY */
 body {
     background: var(--bg);
     color: var(--text);
@@ -28,25 +27,20 @@ body {
 
     display: flex;
     justify-content: center;
-    align-items: flex-start;
-
-    padding-top: 40px;
-    min-height: 100vh;
+    padding: 40px 0;
 }
 
-
+/* CONTAINER */
 .container {
     width: 100%;
     max-width: 420px;
-
     display: flex;
     flex-direction: column;
-    align-items: center;
     gap: 20px;
-
     text-align: center;
 }
 
+/* BOTÃO TEMA */
 .theme-btn {
     position: fixed;
     top: 15px;
@@ -61,33 +55,30 @@ body {
     font-size: 18px;
 }
 
-
+/* CARD DO FORMULÁRIO */
 .card {
     width: 100%;
     background: var(--card);
-    padding: 20px;
+    padding: 22px;
     border-radius: 14px;
     border: 1px solid var(--border);
 
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 16px;
 
-    align-items: stretch; 
+    box-shadow: 0 0 10px rgba(0,0,0,0.10);
 }
 
-
+/* LABELS */
 .card label {
     display: flex;
     flex-direction: column;
     gap: 5px;
-
-    font-size: 15px;
     text-align: left;
-    width: 100%;
 }
 
-
+/* INPUTS */
 input,
 textarea {
     width: 100%;
@@ -102,13 +93,13 @@ textarea {
 .time-group {
     display: flex;
     gap: 10px;
-    width: 100%;
 }
 
 .time-group label {
     flex: 1;
 }
 
+/* BOTÃO ADD */
 .add-btn {
     width: 100%;
     background: #007bff;
@@ -118,22 +109,66 @@ textarea {
     font-size: 16px;
     border-radius: 10px;
     cursor: pointer;
+    transition: 0.2s;
 }
 
 .add-btn:hover {
     opacity: 0.9;
 }
 
+/* LISTA */
 #listaAtividades {
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
-#listaAtividades .atividade {
+/* CARD COMPACTO */
+.atividade {
     background: var(--card);
     border: 1px solid var(--border);
-    padding: 15px;
-    border-radius: 12px;
-
-    width: 100%;
+    padding: 14px 16px;
+    border-radius: 10px;
     text-align: left;
+
+    box-shadow: 0 0 5px rgba(0,0,0,0.08);
+}
+
+.atividade p {
+    margin-bottom: 4px;
+    font-size: 14px;
+}
+
+.btn-group {
+    margin-top: 10px;
+    display: flex;
+    gap: 10px;
+}
+
+.btn-edit, .btn-delete {
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 13px;
+    cursor: pointer;
+    border: none;
+    transition: 0.2s;
+}
+
+.btn-edit {
+    background: #007bff;
+    color: white;
+}
+
+.btn-edit:hover {
+    opacity: 0.85;
+}
+
+.btn-delete {
+    background: #d9534f;
+    color: white;
+}
+
+.btn-delete:hover {
+    opacity: 0.85;
 }
