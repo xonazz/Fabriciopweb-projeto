@@ -1,65 +1,158 @@
-import Image from "next/image";
+"use client";
+
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
 
 export default function Home() {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.js file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    const [atividades, setAtividades] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [nome, setNome] = useState('');
+    const [data, setData] = useState('');
+    const [inicio, setInicio] = useState('');
+    const [fim, setFim] = useState('');
+    const [descricao, setDescricao] = useState('');
+    const [error, setError] = useState(null);
+
+    const fetchAtividades = async () => {
+        setIsLoading(true);
+        try {
+            const response = await fetch('/api/atividades', { method: 'GET' });
+            
+            if (response.ok) {
+                const data = await response.json();
+                setAtividades(data);
+                setError(null);
+            } else {
+                const err = await response.json();
+                setError(`Erro ao carregar atividades: ${err.error}`);
+                setAtividades([]);
+            }
+        } catch (err) {
+            setError('Erro de rede ao conectar com o backend.');
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchAtividades();
+    }, []);
+
+    const handleAdicionarAtividade = async (e) => {
+        e.preventDefault();
+        setError(null);
+
+        const novaAtividade = { nome, data, inicio, fim, descricao };
+
+        try {
+            const response = await fetch('/api/atividades', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(novaAtividade),
+            });
+
+            if (response.ok) {
+                await fetchAtividades();
+                setNome('');
+                setData('');
+                setInicio('');
+                setFim('');
+                setDescricao('');
+            } else {
+                const err = await response.json();
+                setError(`Falha ao adicionar: ${err.error}`);
+            }
+        } catch (err) {
+            setError('Erro de rede ao salvar a atividade.');
+        }
+    };
+
+    const handleExcluirAtividade = async (id) => {
+        if (!window.confirm("Tem certeza que deseja excluir esta atividade?")) return;
+
+        try {
+            const response = await fetch(`/api/atividades/${id}`, {
+                method: 'DELETE',
+            });
+
+            // Status 204 (No Content) ou 200 (OK) indicam sucesso
+            if (response.status === 204 || response.status === 200) {
+                await fetchAtividades(); 
+            } else {
+                const err = await response.json();
+                setError(`Falha ao excluir: ${err.error}`);
+            }
+        } catch (err) {
+            setError('Erro de rede ao excluir a atividade.');
+        }
+    };
+
+    const estiloContainer = {
+        maxWidth: '800px',
+        margin: '0 auto',
+        padding: '20px',
+        fontFamily: 'Arial, sans-serif'
+    };
+
+    return (
+        <div style={estiloContainer}>
+            <h1>📅 Organizador de Atividades</h1>
+            
+            <h2>Nova Atividade</h2>
+            {error && <p style={{ color: 'red', border: '1px solid red', padding: '10px' }}>{error}</p>}
+            
+            <form onSubmit={handleAdicionarAtividade} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '30px' }}>
+                <input type="text" value={nome} onChange={(e) => setNome(e.target.value)} placeholder="Nome da Atividade (Obrigatório)" required style={{ padding: '8px', border: '1px solid #ccc', gridColumn: '1 / span 2' }} />
+                <input type="date" value={data} onChange={(e) => setData(e.target.value)} required style={{ padding: '8px', border: '1px solid #ccc' }} />
+                <input type="time" value={inicio} onChange={(e) => setInicio(e.target.value)} placeholder="Início" style={{ padding: '8px', border: '1px solid #ccc' }} />
+                <input type="time" value={fim} onChange={(e) => setFim(e.target.value)} placeholder="Fim" style={{ padding: '8px', border: '1px solid #ccc' }} />
+                <textarea value={descricao} onChange={(e) => setDescricao(e.target.value)} placeholder="Descrição (Opcional)" style={{ padding: '8px', border: '1px solid #ccc', gridColumn: '1 / span 2', minHeight: '80px' }} />
+                <button type="submit" style={{ padding: '10px', backgroundColor: '#4CAF50', color: 'white', border: 'none', cursor: 'pointer', gridColumn: '1 / span 2' }}>
+                    Adicionar Atividade
+                </button>
+            </form>
+
+            <h2>Próximas Atividades</h2>
+            
+            {isLoading && <p>Carregando lista...</p>}
+
+            {!isLoading && atividades.length === 0 && (
+                <p>Nenhuma atividade agendada. Adicione uma nova acima!</p>
+            )}
+
+            <ul style={{ listStyle: 'none', padding: 0 }}>
+                {atividades.map((atividade) => (
+                    <li key={atividade.id} style={{ 
+                        border: '1px solid #ddd', 
+                        padding: '15px', 
+                        marginBottom: '10px', 
+                        borderRadius: '4px', 
+                        display: 'flex', 
+                        justifyContent: 'space-between', 
+                        alignItems: 'center' 
+                    }}>
+                        <div>
+                            <strong>{atividade.nome}</strong> 
+                            <span style={{ marginLeft: '10px', color: '#666' }}>({atividade.data} {atividade.inicio})</span>
+                        </div>
+                        <div>
+                            <Link href={`/atividade/${atividade.id}`} style={{ marginRight: '10px', color: 'blue', textDecoration: 'none' }}>
+                                Ver Detalhes/Editar
+                            </Link>
+                            <button onClick={() => handleExcluirAtividade(atividade.id)} style={{ 
+                                padding: '5px 10px', 
+                                backgroundColor: '#f44336', 
+                                color: 'white', 
+                                border: 'none', 
+                                borderRadius: '4px', 
+                                cursor: 'pointer' 
+                            }}>
+                                Excluir
+                            </button>
+                        </div>
+                    </li>
+                ))}
+            </ul>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
-  );
+    );
 }

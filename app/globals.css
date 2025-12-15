@@ -1,26 +1,210 @@
 @import "tailwindcss";
 
+/* Definições de Variáveis de Tema */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background-light: #ffffff;
+  --text-light: #333333;
+  --card-light: #f9f9f9;
+  --primary-color: #0070f3;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+.dark {
+  --background-light: #1e1e1e;
+  --text-light: #f0f0f0;
+  --card-light: #2d2d2d;
+  --primary-color: #00aaff;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* Base */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--background-light);
+  color: var(--text-light);
+  transition: background-color 0.3s, color 0.3s;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+}
+
+.main-wrapper {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Tema Escuro */
+.dark .card, .dark .atividade {
+  border-color: #555555;
+}
+
+/* Botão de Tema */
+.theme-btn {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 10px 15px;
+  background-color: var(--card-light);
+  color: var(--text-light);
+  border: 1px solid var(--text-light);
+  border-radius: 4px;
+  cursor: pointer;
+  z-index: 10;
+}
+
+/* Formulário e Cards */
+.card {
+  padding: 20px;
+  border: 1px solid var(--text-light);
+  border-radius: 8px;
+  margin-bottom: 30px;
+  background-color: var(--card-light);
+}
+
+label {
+  display: block;
+  margin-top: 10px;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+input[type="text"],
+input[type="date"],
+input[type="time"],
+textarea {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  background-color: var(--background-light);
+  color: var(--text-light);
+}
+
+.time-group {
+    display: flex;
+    gap: 15px;
+}
+
+.time-group label, .time-group input {
+    flex-grow: 1;
+}
+
+.add-btn {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 4px;
+  font-size: 16px;
+  margin-top: 15px;
+  width: 100%;
+}
+
+/* --- ESTILOS DE EDIÇÃO NO FORMULÁRIO --- */
+.add-btn.edit-mode {
+    background-color: #28a745; /* Verde para Salvar Edição */
+}
+
+.add-btn.edit-mode:hover {
+    background-color: #1e7e34;
+}
+
+.cancel-btn {
+    background-color: #6c757d; /* Cinza para Cancelar Edição */
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 4px;
+    font-size: 16px;
+    margin-top: 10px;
+    width: 100%;
+}
+
+.cancel-btn:hover {
+    background-color: #5a6268;
+}
+
+
+/* Lista de Atividades */
+.atividade {
+  border: 1px solid #555555;
+  background-color: var(--card-light);
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 6px;
+}
+
+.no-activities-msg {
+    text-align: center;
+    font-style: italic;
+    color: #888;
+}
+
+/* Estilo para links dentro da lista de atividades */
+.atividade-title-link {
+    color: var(--primary-color);
+    text-decoration: none;
+    cursor: pointer;
+    transition: text-decoration 0.2s;
+}
+
+.atividade-title-link:hover {
+    text-decoration: underline;
+}
+
+/* --- Botões de Ação na Atividade (Editar/Excluir/Detalhes) --- */
+.btn-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+/* Estiliza o Link para ter o mesmo layout do botão */
+.detail-btn-link {
+    flex-grow: 0.8; 
+    text-decoration: none; 
+}
+
+.btn-group button {
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s;
+    flex-grow: 1; 
+    border: none;
+}
+
+/* Botão de Detalhes */
+.detail-btn {
+    background-color: #6c757d;
+    color: white;
+    height: 100%; 
+    width: 100%;
+}
+
+.detail-btn:hover {
+    background-color: #5a6268;
+}
+
+
+/* Botão de Edição */
+.edit-btn {
+    background-color: #ffc107; 
+    color: #333;
+}
+
+.edit-btn:hover {
+    background-color: #e0a800;
+}
+
+/* Botão de Exclusão */
+.delete-btn {
+    background-color: #dc3545; 
+    color: white;
+}
+
+.delete-btn:hover {
+    background-color: #c82333;
 }

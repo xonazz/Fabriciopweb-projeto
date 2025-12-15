@@ -1,0 +1,19 @@
+// prisma/schema.prisma
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL") // Coloque sua URL de conexão aqui
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Atividade {
+  id        String    @id @default(cuid())
+  data      String
+  nome      String
+  inicio    String
+  fim       String
+  descricao String?
+}
